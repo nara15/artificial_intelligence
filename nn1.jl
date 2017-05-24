@@ -193,19 +193,102 @@ out0 = 1.0 * [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 
 
 
-red = ini_red([64,10,10])
-for i in 1:1000
-	propagar(red, in1, out1)
-	propagar(red, in2, out2)
-	propagar(red, in3, out3)
-	propagar(red, in4, out4)
-	propagar(red, in5, out5)
-	propagar(red, in6, out6)
-	propagar(red, in7, out7)
-	propagar(red, in8, out8)
-	propagar(red, in9, out9)
-	propagar(red, in0, out0)
+function entrenar(output::String, oculta::Int64, max_iter::Int64)
+	red = ini_red([64,oculta,10])
+	for i in 1:max_iter
+		propagar(red, in1, out1)
+		propagar(red, in2, out2)
+		propagar(red, in3, out3)
+		propagar(red, in4, out4)
+		propagar(red, in5, out5)
+		propagar(red, in6, out6)
+		propagar(red, in7, out7)
+		propagar(red, in8, out8)
+		propagar(red, in9, out9)
+		propagar(red, in0, out0)
+	end
+	
+	output_wi = string("out_wi", output)
+	output_wo = string("out_wo", output)
+	
+	pesos_ci = string("out_pesos_ci", output)
+	pesos_co = string("out_pesos_co", output)
+	
+	writedlm(output_wi, red.wi)
+	writedlm(output_wo, red.wo)
+	writedlm(pesos_ci, red.pesos_ci)
+	writedlm(pesos_co, red.pesos_co)
+	
+	#return red
 end
+
+
+function test(red::String)
+	wi = string("out_wi", red)
+	wo = string("out_wo", red)
+	pesos_ci = string("out_pesos_ci", red)
+	pesos_co = string("out_pesos_co", red)
+	net = ini_red([64,10,10])
+	
+	net.wi = readdlm(wi)
+	net.wo = readdlm(wo)
+	net.pesos_ci = readdlm(pesos_ci)
+	net.pesos_co = readdlm(pesos_co)
+	
+	exito = 0
+	
+	eval_red(net, in1)
+	queNumeroEs = findmax(net.nodosSalida)[2]
+	if (queNumeroEs == 1) 
+		exito = exito + 1 
+	end
+	
+	eval_red(net, in2)
+	queNumeroEs = findmax(net.nodosSalida)[2]
+	if (queNumeroEs == 2) exito = exito + 1 end
+	
+	eval_red(net, in3)
+	queNumeroEs = findmax(net.nodosSalida)[2]
+	if (queNumeroEs == 3) exito = exito + 1 end
+	
+	eval_red(net, in4)
+	queNumeroEs = findmax(net.nodosSalida)[2]
+	if (queNumeroEs == 4) exito = exito + 1 end
+	
+	eval_red(net, in5)
+	queNumeroEs = findmax(net.nodosSalida)[2]
+	if (queNumeroEs == 5) exito = exito + 1 end
+	
+	eval_red(net, in6)
+	queNumeroEs = findmax(net.nodosSalida)[2]
+	if (queNumeroEs == 6) exito = exito + 1 end
+	
+	eval_red(net, in7)
+	queNumeroEs = findmax(net.nodosSalida)[2]
+	if (queNumeroEs == 7) exito = exito + 1 end
+	
+	eval_red(net, in8)
+	queNumeroEs = findmax(net.nodosSalida)[2]
+	if (queNumeroEs == 8) exito = exito + 1 end
+	
+	eval_red(net, in9)
+	queNumeroEs = findmax(net.nodosSalida)[2]
+	if (queNumeroEs == 9) exito = exito + 1 end
+	
+	eval_red(net, in0)
+	queNumeroEs = findmax(net.nodosSalida)[2]
+	if (queNumeroEs == 10) exito = exito + 1 end
+	
+	
+	println(string("Casos correctos: ", exito))
+
+
+end
+
+
+#entrenar("hola.txt", 10, 5000)
+
+
 
 
 
